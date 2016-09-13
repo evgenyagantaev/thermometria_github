@@ -67,7 +67,8 @@ int16_t aux16;
 uint8_t aux8;
 
 //#include "calibration_table_000.h"
-#include "calibration_table_001.h"
+//#include "calibration_table_001.h"
+#include "calibration_table_empty.h"
 double surface_themps[2][16];
 
 int32_t *out_buffer = buffer0;
