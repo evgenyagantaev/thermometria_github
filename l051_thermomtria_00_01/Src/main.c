@@ -55,7 +55,7 @@ const double a = -7.858e-06;
 const double b = -1.778e-01;
 const double c = 2.0464e+02;
 
-const double K = 97.4 / 0.65;
+const double K = 128;
 // Private variables ---------------------------------------------------------
 int debug_flag = 0;
 UART_HandleTypeDef huart1;
@@ -67,8 +67,8 @@ int16_t aux16;
 uint8_t aux8;
 
 //#include "calibration_table_000.h"
-//#include "calibration_table_001.h"
-#include "calibration_table_empty.h"
+#include "calibration_table_001.h"
+//#include "calibration_table_empty.h"
 double surface_themps[2][16];
 
 int32_t *out_buffer = buffer0;
@@ -222,7 +222,7 @@ int main(void)
 		oral_themperature -= 273.15;
 		double t = oral_themperature * 100.0;
 		//fill_buffer[32] = (int32_t)(t - (p[16]*t + q[16]) + 1.697*log(fabs(t)));
-		fill_buffer[32] = (int32_t)(t - (p[16]*t + q[16]));
+		fill_buffer[32] = (int32_t)(t + 3);
 
 		// read rectal themperature (adc1 vhod ain3)
 		reset_ads1220_1(0x03); // configure adc1 input 3
@@ -237,7 +237,7 @@ int main(void)
 		rectal_themperature -= 273.15;
 		t = rectal_themperature * 100.0;
 		//fill_buffer[33] = (int32_t)(t - (p[16]*t + q[16]) + 1.697*log(fabs(t)));
-		fill_buffer[33] = (int32_t)(t - (p[16]*t + q[16]));
+		fill_buffer[33] = (int32_t)(t +3);
 
 		//read surface themperatures and fluxes ************************************
 
@@ -276,14 +276,16 @@ int main(void)
 			double adc2_themperature_2 = a*V*V + b*V + c;
 			surface_themps[1][i] = adc2_themperature_2;
 			t = adc2_themperature_2 *100.0;
-			fill_buffer[16 + i] = (int32_t)(t - (p[i]*t + q[i]));
+			fill_buffer[16 + i] = (int32_t)(t - (p[i+16]*t + q[i+16]));
 			if(i == 3|| i == 15) // wrong sensors
 			{
 				int32_t aux = fill_buffer[16 + i];
 				fill_buffer[16 + i] = fill_buffer[i];
 				fill_buffer[i] = aux;
 			}
-			fill_buffer[16 + i] = (fill_buffer[i] - fill_buffer[16 + i]) * K - Q[i];
+			// calculate and save thermo flux (if commented out, temperatures are output) ***
+			//fill_buffer[16 + i] = (fill_buffer[i] - fill_buffer[16 + i]) * K - Q[i];
+			// save temperature ***
 			HAL_GPIO_WritePin(port[i], pin[i], GPIO_PIN_RESET); // turn off thermosensor i
 			HAL_Delay(3);
 		}
