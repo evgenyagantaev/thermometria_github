@@ -67,7 +67,8 @@ int16_t aux16;
 uint8_t aux8;
 
 //#include "calibration_table_000.h"
-#include "calibration_table_001.h"
+//#include "calibration_table_002.h"
+#include "calibration_table_004.h"
 //#include "calibration_table_empty.h"
 double surface_themps[2][16];
 
@@ -258,7 +259,10 @@ int main(void)
 			double adc2_themperature_1 = a*V*V + b*V + c;
 			surface_themps[0][i] = adc2_themperature_1;
 			t = adc2_themperature_1 *100.0;
-			fill_buffer[i] = (int32_t)(t - (p[i]*t + q[i]));
+			if(t >= 1000)
+				fill_buffer[i] = (int32_t)(t - (p[i]*t + q[i]));
+			else
+				fill_buffer[i] = (int32_t)(t - (p[i]*t + q_zero[i]));
 			//fill_buffer[i] = adc_data;
 			HAL_GPIO_WritePin(port[i], pin[i], GPIO_PIN_RESET); // turn off thermosensor i
 			HAL_Delay(3);
@@ -276,7 +280,11 @@ int main(void)
 			double adc2_themperature_2 = a*V*V + b*V + c;
 			surface_themps[1][i] = adc2_themperature_2;
 			t = adc2_themperature_2 *100.0;
-			fill_buffer[16 + i] = (int32_t)(t - (p[i+16]*t + q[i+16]));
+
+			if(t >= 1000)
+				fill_buffer[16 + i] = (int32_t)(t - (p[i+16]*t + q[i+16]));
+			else
+				fill_buffer[16 + i] = (int32_t)(t - (p[i+16]*t + q_zero[i+16]));
 			if(i == 3|| i == 15) // wrong sensors
 			{
 				int32_t aux = fill_buffer[16 + i];
