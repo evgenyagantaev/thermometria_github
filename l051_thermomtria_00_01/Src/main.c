@@ -55,7 +55,6 @@ const double a = -7.858e-06;
 const double b = -1.778e-01;
 const double c = 2.0464e+02;
 
-const double K = 128;
 // Private variables ---------------------------------------------------------
 int debug_flag = 0;
 UART_HandleTypeDef huart1;
@@ -66,9 +65,14 @@ int32_t buffer1[34];
 int16_t aux16;
 uint8_t aux8;
 
+
+#define FLUX		// if defined, thermo fluxes are calculated and output
+
 //#include "calibration_table_000.h"
+#include "calibration_table_001.h"
 //#include "calibration_table_002.h"
-#include "calibration_table_004.h"
+//#include "calibration_table_003.h"
+//#include "calibration_table_004.h"
 //#include "calibration_table_empty.h"
 double surface_themps[2][16];
 
@@ -135,6 +139,8 @@ void long_delay()
 int main(void)
 {
 
+	int i,j,k;
+
 	// MCU Configuration----------------------------------------------------------
 
 	// Reset of all peripherals, Initializes the Flash interface and the Systick.
@@ -190,10 +196,17 @@ int main(void)
 	}
 	*/
 
+	// set up calibration data:
+	for(i=0; i<DATA_LENGTH; i++)
+	{
+		D[i] = L[i] - H[i];
+		Q[i] = D[i]/(T0+500);		// correction on -5 Celsius
+	}
+
 	while (1)
 	{
 
-		int i,j,k;
+
 
 		// calibrate adc1 (vhod ain1) *****************************
 		reset_ads1220_1(0x01); // configure adc1 input 1
@@ -209,7 +222,7 @@ int main(void)
 		//const double internal_reference = 2048.0 + (double)((1100.0 - adc1_reference_voltage) * 8388608.0 / ((double)adc_data));
 		//const double internal_reference = 3300.0 + (double)((2200.0 - adc1_reference_voltage) * 8388608.0 / ((double)adc_data));
 
-		// read oral themperature (adc1 vhod ain2)
+		// read oral temperature (adc1 vhod ain2)
 		reset_ads1220_1(0x02); // configure adc1 input 2
 		HAL_Delay(3);
 		adc_data = read_adc1();
@@ -218,27 +231,33 @@ int main(void)
 		//double oral_rezistance = oral_voltage * 2;
 		double oral_rezistance = oral_voltage * 4.0;
 		double LnR = log(oral_rezistance);
-		double oral_themperature = A + B * LnR + C * LnR * LnR * LnR;
-		oral_themperature = 1.0 / oral_themperature;
-		oral_themperature -= 273.15;
-		double t = oral_themperature * 100.0;
-		//fill_buffer[32] = (int32_t)(t - (p[16]*t + q[16]) + 1.697*log(fabs(t)));
-		fill_buffer[32] = (int32_t)(t + 3);
+		double oral_temperature = A + B * LnR + C * LnR * LnR * LnR;
+		oral_temperature = 1.0 / oral_temperature;
+		oral_temperature -= 273.15;
+		double t = oral_temperature * 100.0;
+		fill_buffer[DATA_LENGTH - 2] = (int32_t)t;
+		if(t >= T0)
+			fill_buffer[DATA_LENGTH - 2] = (int32_t)(t - H[DATA_LENGTH - 2]);
+		else // t < T0
+			fill_buffer[DATA_LENGTH - 2] = (int32_t)(t -(H[DATA_LENGTH - 2] + (T0-t)*Q[DATA_LENGTH - 2]));
 
-		// read rectal themperature (adc1 vhod ain3)
 		reset_ads1220_1(0x03); // configure adc1 input 3
 		HAL_Delay(3);
 		adc_data = read_adc1();
 		double rectal_voltage = ((double)adc_data) / ((double)(range / 3300));
-		//double oral_rezistance = oral_voltage * 2;
+
 		double rectal_rezistance = rectal_voltage * 4.0;
 		LnR = log(rectal_rezistance);
-		double rectal_themperature = A + B * LnR + C * LnR * LnR * LnR;
-		rectal_themperature = 1.0 / rectal_themperature;
-		rectal_themperature -= 273.15;
-		t = rectal_themperature * 100.0;
-		//fill_buffer[33] = (int32_t)(t - (p[16]*t + q[16]) + 1.697*log(fabs(t)));
-		fill_buffer[33] = (int32_t)(t +3);
+		double rectal_temperature = A + B * LnR + C * LnR * LnR * LnR;
+		rectal_temperature = 1.0 / rectal_temperature;
+		rectal_temperature -= 273.15;
+		t = rectal_temperature * 100.0;
+		fill_buffer[DATA_LENGTH - 1] = (int32_t)t;
+		if(t >= T0)
+			fill_buffer[DATA_LENGTH - 1] = (int32_t)(t - H[DATA_LENGTH - 1]);
+		else // t < T0
+			fill_buffer[DATA_LENGTH - 1] = (int32_t)(t -(H[DATA_LENGTH - 1] + (T0-t)*Q[DATA_LENGTH - 1]));
+
 
 		//read surface themperatures and fluxes ************************************
 
@@ -259,11 +278,8 @@ int main(void)
 			double adc2_themperature_1 = a*V*V + b*V + c;
 			surface_themps[0][i] = adc2_themperature_1;
 			t = adc2_themperature_1 *100.0;
-			if(t >= 1000)
-				fill_buffer[i] = (int32_t)(t - (p[i]*t + q[i]));
-			else
-				fill_buffer[i] = (int32_t)(t - (p[i]*t + q_zero[i]));
-			//fill_buffer[i] = adc_data;
+			fill_buffer[i] = (int32_t)t;
+
 			HAL_GPIO_WritePin(port[i], pin[i], GPIO_PIN_RESET); // turn off thermosensor i
 			HAL_Delay(3);
 
@@ -280,24 +296,45 @@ int main(void)
 			double adc2_themperature_2 = a*V*V + b*V + c;
 			surface_themps[1][i] = adc2_themperature_2;
 			t = adc2_themperature_2 *100.0;
+			fill_buffer[16 + i] = (int32_t)t;
 
-			if(t >= 1000)
-				fill_buffer[16 + i] = (int32_t)(t - (p[i+16]*t + q[i+16]));
-			else
-				fill_buffer[16 + i] = (int32_t)(t - (p[i+16]*t + q_zero[i+16]));
-			if(i == 3|| i == 15) // wrong sensors
-			{
-				int32_t aux = fill_buffer[16 + i];
-				fill_buffer[16 + i] = fill_buffer[i];
-				fill_buffer[i] = aux;
-			}
-			// calculate and save thermo flux (if commented out, temperatures are output) ***
-			//fill_buffer[16 + i] = (fill_buffer[i] - fill_buffer[16 + i]) * K - Q[i];
+
 			// save temperature ***
 			HAL_GPIO_WritePin(port[i], pin[i], GPIO_PIN_RESET); // turn off thermosensor i
 			HAL_Delay(3);
 		}
 
+		// switch wrong sensors
+		for (i = 0; i < 16; i++)
+		{
+			if(i == 3 || i == 15) // wrong sensors
+			{
+				int32_t aux = fill_buffer[16 + i];
+				fill_buffer[16 + i] = fill_buffer[i];
+				fill_buffer[i] = aux;
+			}
+		}
+
+		// calibrate
+		for (i = 0; i < (DATA_LENGTH-2); i++)
+		{
+			if(fill_buffer[i] >= T0)
+			{
+				fill_buffer[i] = (int32_t)(fill_buffer[i] - H[i]); // O4-($X4+(O4-$X4-20)*0.032)
+				//fill_buffer[i] = (int32_t)(fill_buffer[i] - (H[i] + (fill_buffer[i] - H[i] - T1)*0.032));
+			}
+			else // t < T0
+				fill_buffer[i] = (int32_t)(fill_buffer[i] -(H[i] + (T0-t)*Q[i]));
+		}
+
+
+#ifdef FLUX	//*****************************************************************************
+		for (i = 0; i < (DATA_LENGTH-2)/2; i++)
+		{
+
+			fill_buffer[16 + i] = (fill_buffer[i] - fill_buffer[16 + i]) * K[i] - J[i];
+		}
+#endif		//*****************************************************************************
 
 		// change buffers
 		int32_t *aux_pointer = out_buffer;

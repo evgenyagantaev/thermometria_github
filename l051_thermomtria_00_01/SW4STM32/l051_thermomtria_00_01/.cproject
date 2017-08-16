@@ -103,4 +103,5 @@
 			<resource resourceType="PROJECT" workspacePath="l051_thermomtria_00_01"/>
 		</configuration>
 	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 </cproject>
