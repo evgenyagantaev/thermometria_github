@@ -11,7 +11,7 @@ double D[DATA_LENGTH] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 double Q[DATA_LENGTH] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 			    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};  // low temperature coefficient
 
-double K[(DATA_LENGTH-2)/2] = {1,1,158,130,1,159,155,145,1,139,190,155,128,148,158,138};  // flux coefficient
+double K[(DATA_LENGTH-2)/2] = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};  // flux coefficient
 double J[(DATA_LENGTH-2)/2] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};  // flux offset
 
 

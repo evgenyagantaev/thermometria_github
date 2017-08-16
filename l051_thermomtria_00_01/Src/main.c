@@ -68,8 +68,8 @@ uint8_t aux8;
 
 //#define FLUX		// if defined, thermo fluxes are calculated and output
 
-//#include "calibration_table_000.h"
-#include "calibration_table_001.h"
+#include "calibration_table_000.h"
+//#include "calibration_table_001.h"
 //#include "calibration_table_002.h"
 //#include "calibration_table_003.h"
 //#include "calibration_table_004.h"
