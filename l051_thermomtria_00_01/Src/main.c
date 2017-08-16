@@ -66,7 +66,7 @@ int16_t aux16;
 uint8_t aux8;
 
 
-#define FLUX		// if defined, thermo fluxes are calculated and output
+//#define FLUX		// if defined, thermo fluxes are calculated and output
 
 //#include "calibration_table_000.h"
 #include "calibration_table_001.h"
@@ -546,7 +546,7 @@ void reset_ads1220_2(uint8_t input)
   while ((SPI1->SR & SPI_FLAG_RXNE) == RESET);
   aux = SPI1->DR;
   while ((SPI1->SR & SPI_FLAG_TXE) == RESET );
-  SPI1->DR=0x00;    // [00] internal 2.048V ref; [00] no filters; [0]; [000] current off [00000000]
+  SPI1->DR=0xc0;    // [01] external ref using dedicated REFP0 and REFN0 inputs; [00] no filters; [0]; [000] current off [00000000]
   // fictious reading
   while ((SPI1->SR & SPI_FLAG_RXNE) == RESET);
   aux = SPI1->DR;
