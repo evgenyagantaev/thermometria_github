@@ -546,7 +546,7 @@ void reset_ads1220_2(uint8_t input)
   while ((SPI1->SR & SPI_FLAG_RXNE) == RESET);
   aux = SPI1->DR;
   while ((SPI1->SR & SPI_FLAG_TXE) == RESET );
-  SPI1->DR=0xc0;    // [01] external ref using dedicated REFP0 and REFN0 inputs; [00] no filters; [0]; [000] current off [00000000]
+  SPI1->DR=0x40;    //[0100 0000] [01] external ref using dedicated REFP0 and REFN0 inputs; [00] no filters; [0]; [000] current off [00000000]
   // fictious reading
   while ((SPI1->SR & SPI_FLAG_RXNE) == RESET);
   aux = SPI1->DR;
