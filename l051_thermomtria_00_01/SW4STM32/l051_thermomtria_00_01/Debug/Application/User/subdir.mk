@@ -35,7 +35,7 @@ C_DEPS += \
 Application/User/gpio.o: C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Src/gpio.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: MCU GCC Compiler'
-	@echo %cd%
+	@echo $(PWD)
 	arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -mfloat-abi=soft '-D__weak=__attribute__((weak))' '-D__packed="__attribute__((__packed__))"' -DUSE_HAL_DRIVER -DSTM32L051xx -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Inc" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/STM32L0xx_HAL_Driver/Inc" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/STM32L0xx_HAL_Driver/Inc/Legacy" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/CMSIS/Include" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/CMSIS/Device/ST/STM32L0xx/Include"  -O0 -g3 -Wall -fmessage-length=0 -ffunction-sections -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
@@ -43,7 +43,7 @@ Application/User/gpio.o: C:/workspace/ac6_mars_workspace/l051workspace/fromcube/
 Application/User/main.o: C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Src/main.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: MCU GCC Compiler'
-	@echo %cd%
+	@echo $(PWD)
 	arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -mfloat-abi=soft '-D__weak=__attribute__((weak))' '-D__packed="__attribute__((__packed__))"' -DUSE_HAL_DRIVER -DSTM32L051xx -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Inc" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/STM32L0xx_HAL_Driver/Inc" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/STM32L0xx_HAL_Driver/Inc/Legacy" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/CMSIS/Include" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/CMSIS/Device/ST/STM32L0xx/Include"  -O0 -g3 -Wall -fmessage-length=0 -ffunction-sections -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
@@ -51,7 +51,7 @@ Application/User/main.o: C:/workspace/ac6_mars_workspace/l051workspace/fromcube/
 Application/User/spi.o: C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Src/spi.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: MCU GCC Compiler'
-	@echo %cd%
+	@echo $(PWD)
 	arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -mfloat-abi=soft '-D__weak=__attribute__((weak))' '-D__packed="__attribute__((__packed__))"' -DUSE_HAL_DRIVER -DSTM32L051xx -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Inc" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/STM32L0xx_HAL_Driver/Inc" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/STM32L0xx_HAL_Driver/Inc/Legacy" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/CMSIS/Include" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/CMSIS/Device/ST/STM32L0xx/Include"  -O0 -g3 -Wall -fmessage-length=0 -ffunction-sections -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
@@ -59,7 +59,7 @@ Application/User/spi.o: C:/workspace/ac6_mars_workspace/l051workspace/fromcube/t
 Application/User/stm32l0xx_hal_msp.o: C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Src/stm32l0xx_hal_msp.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: MCU GCC Compiler'
-	@echo %cd%
+	@echo $(PWD)
 	arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -mfloat-abi=soft '-D__weak=__attribute__((weak))' '-D__packed="__attribute__((__packed__))"' -DUSE_HAL_DRIVER -DSTM32L051xx -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Inc" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/STM32L0xx_HAL_Driver/Inc" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/STM32L0xx_HAL_Driver/Inc/Legacy" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/CMSIS/Include" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/CMSIS/Device/ST/STM32L0xx/Include"  -O0 -g3 -Wall -fmessage-length=0 -ffunction-sections -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
@@ -67,7 +67,7 @@ Application/User/stm32l0xx_hal_msp.o: C:/workspace/ac6_mars_workspace/l051worksp
 Application/User/stm32l0xx_it.o: C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Src/stm32l0xx_it.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: MCU GCC Compiler'
-	@echo %cd%
+	@echo $(PWD)
 	arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -mfloat-abi=soft '-D__weak=__attribute__((weak))' '-D__packed="__attribute__((__packed__))"' -DUSE_HAL_DRIVER -DSTM32L051xx -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Inc" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/STM32L0xx_HAL_Driver/Inc" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/STM32L0xx_HAL_Driver/Inc/Legacy" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/CMSIS/Include" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/CMSIS/Device/ST/STM32L0xx/Include"  -O0 -g3 -Wall -fmessage-length=0 -ffunction-sections -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
@@ -75,7 +75,7 @@ Application/User/stm32l0xx_it.o: C:/workspace/ac6_mars_workspace/l051workspace/f
 Application/User/tim.o: C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Src/tim.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: MCU GCC Compiler'
-	@echo %cd%
+	@echo $(PWD)
 	arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -mfloat-abi=soft '-D__weak=__attribute__((weak))' '-D__packed="__attribute__((__packed__))"' -DUSE_HAL_DRIVER -DSTM32L051xx -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Inc" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/STM32L0xx_HAL_Driver/Inc" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/STM32L0xx_HAL_Driver/Inc/Legacy" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/CMSIS/Include" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/CMSIS/Device/ST/STM32L0xx/Include"  -O0 -g3 -Wall -fmessage-length=0 -ffunction-sections -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
@@ -83,7 +83,7 @@ Application/User/tim.o: C:/workspace/ac6_mars_workspace/l051workspace/fromcube/t
 Application/User/usart.o: C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Src/usart.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: MCU GCC Compiler'
-	@echo %cd%
+	@echo $(PWD)
 	arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -mfloat-abi=soft '-D__weak=__attribute__((weak))' '-D__packed="__attribute__((__packed__))"' -DUSE_HAL_DRIVER -DSTM32L051xx -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Inc" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/STM32L0xx_HAL_Driver/Inc" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/STM32L0xx_HAL_Driver/Inc/Legacy" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/CMSIS/Include" -I"C:/workspace/ac6_mars_workspace/l051workspace/fromcube/thermometria_github/l051_thermomtria_00_01/Drivers/CMSIS/Device/ST/STM32L0xx/Include"  -O0 -g3 -Wall -fmessage-length=0 -ffunction-sections -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '

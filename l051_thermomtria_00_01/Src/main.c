@@ -68,7 +68,7 @@ uint8_t aux8;
 
 //#define FLUX		// if defined, thermo fluxes are calculated and output
 
-#include "calibration_table_000.h"
+#include "calibration_table_2_02.h"
 //#include "calibration_table_001.h"
 //#include "calibration_table_002.h"
 //#include "calibration_table_003.h"
@@ -320,11 +320,10 @@ int main(void)
 		{
 			if(fill_buffer[i] >= T0)
 			{
-				fill_buffer[i] = (int32_t)(fill_buffer[i] - H[i]); // O4-($X4+(O4-$X4-20)*0.032)
-				//fill_buffer[i] = (int32_t)(fill_buffer[i] - (H[i] + (fill_buffer[i] - H[i] - T1)*0.032));
+				fill_buffer[i] = (int32_t)(fill_buffer[i] - H[i]);
 			}
 			else // t < T0
-				fill_buffer[i] = (int32_t)(fill_buffer[i] -(H[i] + (T0-t)*Q[i]));
+				fill_buffer[i] = (int32_t)(fill_buffer[i] -(H[i] + (T0-fill_buffer[i])*Q[i]));
 		}
 
 
