@@ -1,2 +1,5 @@
 /Application/
 /Drivers/
+/sources.mk
+/makefile
+/objects.mk

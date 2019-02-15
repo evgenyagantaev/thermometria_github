@@ -48,6 +48,9 @@ const GPIO_TypeDef *port[] = {GPIOA, GPIOA, GPIOA, GPIOA, GPIOA, GPIOA, GPIOA, G
 				                      GPIOB, GPIOB, GPIOB, GPIOB, GPIOB, GPIOB, GPIOB, GPIOB};
 const uint16_t pin[] = {GPIO_PIN_1, GPIO_PIN_2, GPIO_PIN_3, GPIO_PIN_4, GPIO_PIN_9, GPIO_PIN_10, GPIO_PIN_11, GPIO_PIN_12,
 						GPIO_PIN_2, GPIO_PIN_3, GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_8, GPIO_PIN_9, GPIO_PIN_10, GPIO_PIN_11};
+
+const uint16_t TON1_TON4_pin[] = {GPIO_PIN_1, GPIO_PIN_2, GPIO_PIN_3, GPIO_PIN_4};
+
 const double A = 0.0014733;
 const double B = 0.0002372;
 const double C = 1.074e-07;
@@ -68,8 +71,8 @@ uint8_t aux8;
 
 #define FLUX		// if defined, thermo fluxes are calculated and output
 
-//#include "calibration_table_000.h"
-#include "calibration_table_001.h"
+#include "calibration_table_000.h"
+//#include "calibration_table_001.h"
 //#include "calibration_table_002.h"
 //#include "calibration_table_003.h"
 //#include "calibration_table_004.h"
@@ -139,7 +142,7 @@ void long_delay()
 int main(void)
 {
 
-	int i,j,k;
+	uint8_t i,j,k;
 
 	// MCU Configuration----------------------------------------------------------
 
@@ -270,7 +273,15 @@ int main(void)
 
 		for (i = 0; i < 16; i++)
 		{
-			HAL_GPIO_WritePin(port[i], pin[i], GPIO_PIN_SET); // turn on thermosensor i
+			//HAL_GPIO_WritePin(port[i], pin[i], GPIO_PIN_SET); // turn on thermosensor i
+			uint8_t TON1_TON4_index;
+			uint8_t aux = i + 1;
+			TON1_TON4_index = (aux & (~0x0c)) - 0x01;
+			HAL_GPIO_WritePin(GPIOA, TON1_TON4_pin[TON1_TON4_index], GPIO_PIN_SET); // turn on thermosensor
+			if(aux > 3)
+				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_SET); // turn on S1
+			if((aux & 0x08) > 2)
+				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET); // turn on S0
 			HAL_Delay(3);
 			adc_data = read_adc2();
 			double adc2_input_voltage = ((double)adc_data) / ((double)(8388608.0 / 2048.0));
@@ -280,7 +291,9 @@ int main(void)
 			t = adc2_themperature_1 *100.0;
 			fill_buffer[i] = (int32_t)t;
 
-			HAL_GPIO_WritePin(port[i], pin[i], GPIO_PIN_RESET); // turn off thermosensor i
+			HAL_GPIO_WritePin(GPIOA, TON1_TON4_pin[TON1_TON4_index], GPIO_PIN_RESET); // turn off thermosensor
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_RESET); // turn off S1
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET); // turn off S0
 			HAL_Delay(3);
 
 		}
@@ -288,7 +301,16 @@ int main(void)
 
 		for (i = 0; i < 16; i++)
 		{
-			HAL_GPIO_WritePin(port[i], pin[i], GPIO_PIN_SET); // turn on thermosensor i
+			//HAL_GPIO_WritePin(port[i], pin[i], GPIO_PIN_SET); // turn on thermosensor i
+			uint8_t TON1_TON4_index;
+			uint8_t aux = i + 1;
+			TON1_TON4_index = (aux & (~0x0c)) - 0x01;
+			HAL_GPIO_WritePin(GPIOA, TON1_TON4_pin[TON1_TON4_index], GPIO_PIN_SET); // turn on thermosensor
+			if(aux > 3)
+				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_SET); // turn on S1
+			if((aux & 0x08) > 2)
+				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET); // turn on S0
+			HAL_Delay(3);
 			HAL_Delay(3);
 			adc_data = read_adc2();
 			double adc2_input_voltage = ((double)adc_data) / ((double)(8388608.0 / 2048.0));
@@ -298,9 +320,10 @@ int main(void)
 			t = adc2_themperature_2 *100.0;
 			fill_buffer[16 + i] = (int32_t)t;
 
-
-			// save temperature ***
-			HAL_GPIO_WritePin(port[i], pin[i], GPIO_PIN_RESET); // turn off thermosensor i
+			//HAL_GPIO_WritePin(port[i], pin[i], GPIO_PIN_RESET); // turn off thermosensor i
+			HAL_GPIO_WritePin(GPIOA, TON1_TON4_pin[TON1_TON4_index], GPIO_PIN_RESET); // turn off thermosensor
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_RESET); // turn off S1
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET); // turn off S0
 			HAL_Delay(3);
 		}
 
