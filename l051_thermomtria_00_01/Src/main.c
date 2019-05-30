@@ -69,10 +69,10 @@ int16_t aux16;
 uint8_t aux8;
 
 
-#define FLUX		// if defined, thermo fluxes are calculated and output
+//#define FLUX		// if defined, thermo fluxes are calculated and output
 
-#include "calibration_table_000.h"
-//#include "calibration_table_001.h"
+//#include "calibration_table_000.h"
+#include "calibration_table_001.h"
 //#include "calibration_table_002.h"
 //#include "calibration_table_003.h"
 //#include "calibration_table_004.h"
@@ -275,12 +275,11 @@ int main(void)
 		{
 			//HAL_GPIO_WritePin(port[i], pin[i], GPIO_PIN_SET); // turn on thermosensor i
 			uint8_t TON1_TON4_index;
-			uint8_t aux = i + 1;
-			TON1_TON4_index = (aux & (~0x0c)) - 0x01;
+			TON1_TON4_index = (i & (~0x0c));
 			HAL_GPIO_WritePin(GPIOA, TON1_TON4_pin[TON1_TON4_index], GPIO_PIN_SET); // turn on thermosensor
-			if(aux > 3)
+			if(i >> 3)
 				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_SET); // turn on S1
-			if((aux & 0x08) > 2)
+			if((i & (~0x08)) >> 2)
 				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET); // turn on S0
 			HAL_Delay(3);
 			adc_data = read_adc2();
@@ -303,12 +302,11 @@ int main(void)
 		{
 			//HAL_GPIO_WritePin(port[i], pin[i], GPIO_PIN_SET); // turn on thermosensor i
 			uint8_t TON1_TON4_index;
-			uint8_t aux = i + 1;
-			TON1_TON4_index = (aux & (~0x0c)) - 0x01;
+			TON1_TON4_index = (i & (~0x0c));
 			HAL_GPIO_WritePin(GPIOA, TON1_TON4_pin[TON1_TON4_index], GPIO_PIN_SET); // turn on thermosensor
-			if(aux > 3)
+			if(i >> 3)
 				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_SET); // turn on S1
-			if((aux & 0x08) > 2)
+			if((i & (~0x08)) >> 2)
 				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET); // turn on S0
 			HAL_Delay(3);
 			HAL_Delay(3);
@@ -328,6 +326,7 @@ int main(void)
 		}
 
 		// switch wrong sensors
+		/*
 		for (i = 0; i < 16; i++)
 		{
 			if(i == 3 || i == 15) // wrong sensors
@@ -337,6 +336,7 @@ int main(void)
 				fill_buffer[i] = aux;
 			}
 		}
+		*/
 
 		// calibrate
 		for (i = 0; i < (DATA_LENGTH-2); i++)
@@ -347,7 +347,7 @@ int main(void)
 				//fill_buffer[i] = (int32_t)(fill_buffer[i] - (H[i] + (fill_buffer[i] - H[i] - T1)*0.032));
 			}
 			else // t < T0
-				fill_buffer[i] = (int32_t)(fill_buffer[i] -(H[i] + (T0-t)*Q[i]));
+				fill_buffer[i] = (int32_t)(fill_buffer[i] -(H[i] + (T0-fill_buffer[i])*Q[i]));
 		}
 
 
@@ -569,7 +569,8 @@ void reset_ads1220_2(uint8_t input)
   while ((SPI1->SR & SPI_FLAG_RXNE) == RESET);
   aux = SPI1->DR;
   while ((SPI1->SR & SPI_FLAG_TXE) == RESET );
-  SPI1->DR=0x00;    // [00] internal 2.048V ref; [00] no filters; [0]; [000] current off [00000000]
+  //SPI1->DR=0x00;    // [00] internal 2.048V ref; [00] no filters; [0]; [000] current off [00000000]
+  SPI1->DR=0x40;    // [01] external 2.048V ref; [00] no filters; [0]; [000] current off [00000000]
   // fictious reading
   while ((SPI1->SR & SPI_FLAG_RXNE) == RESET);
   aux = SPI1->DR;
