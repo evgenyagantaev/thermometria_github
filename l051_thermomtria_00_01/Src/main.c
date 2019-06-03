@@ -71,12 +71,8 @@ uint8_t aux8;
 
 //#define FLUX		// if defined, thermo fluxes are calculated and output
 
-//#include "calibration_table_000.h"
 #include "calibration_table_001.h"
-//#include "calibration_table_002.h"
-//#include "calibration_table_003.h"
-//#include "calibration_table_004.h"
-//#include "calibration_table_empty.h"
+
 double surface_themps[2][16];
 
 int32_t *out_buffer = buffer0;
@@ -200,11 +196,13 @@ int main(void)
 	*/
 
 	// set up calibration data:
+	/*
 	for(i=0; i<DATA_LENGTH; i++)
 	{
 		D[i] = L[i] - H[i];
 		Q[i] = D[i]/(T0+500);		// correction on -5 Celsius
 	}
+	*/
 
 	while (1)
 	{
@@ -324,19 +322,6 @@ int main(void)
 			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET); // turn off S0
 			HAL_Delay(3);
 		}
-
-		// switch wrong sensors
-		/*
-		for (i = 0; i < 16; i++)
-		{
-			if(i == 3 || i == 15) // wrong sensors
-			{
-				int32_t aux = fill_buffer[16 + i];
-				fill_buffer[16 + i] = fill_buffer[i];
-				fill_buffer[i] = aux;
-			}
-		}
-		*/
 
 		// calibrate
 		for (i = 0; i < (DATA_LENGTH-2); i++)
